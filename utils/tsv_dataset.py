@@ -564,6 +564,10 @@ def get_token_to_word_map(label_ids, input_ids):
 
 
 def compute_seq_classification_metrics(p: EvalPrediction) -> Dict:
+    print()
+    print(p)
+    print()
+
     preds_list = np.argmax(p.predictions, axis=1).astype(int)
     out_label_list = p.label_ids.astype(int)
     return {

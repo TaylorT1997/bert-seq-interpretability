@@ -56,6 +56,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+os.environ["WANDB_DISABLED"] = "true"
+
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         logger.error("Required args: [config_path] [gpu_ids]")
@@ -182,6 +184,7 @@ if __name__ == "__main__":
         logging_first_step=True,
         logging_dir=output_dir + "/log",
         save_steps=config_dict["logging_steps"],
+        report_to=None
         # evaluate_during_training=True,
     )
 
@@ -224,7 +227,9 @@ if __name__ == "__main__":
     # Evaluate Each Checkpoints
     dev_results = {}
     test_results = {}
-    checkpoints_list = trainer._sorted_checkpoints(output_dir=trainer.args.output_dir)
+    checkpoints_list = (
+        trainer._sorted_checkpoints()
+    )  # output_dir=trainer.args.output_dir)
 
     logger.info("Saved Checkpoints:")
     logger.info(str(checkpoints_list))

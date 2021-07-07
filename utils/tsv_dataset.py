@@ -26,7 +26,6 @@ from transformers import (
 )
 from transformers.data.data_collator import _collate_batch
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -564,11 +563,9 @@ def get_token_to_word_map(label_ids, input_ids):
 
 
 def compute_seq_classification_metrics(p: EvalPrediction) -> Dict:
-    print()
-    print(p)
-    print()
+    preds, _ = p.predictions
 
-    preds_list = np.argmax(p.predictions, axis=1).astype(int)
+    preds_list = np.argmax(preds, axis=1).astype(int)
     out_label_list = p.label_ids.astype(int)
     return {
         "precision": precision_score(out_label_list, preds_list),

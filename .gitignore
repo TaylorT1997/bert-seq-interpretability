@@ -5,7 +5,7 @@ mltagger/
 transformers/
 
 *.out
-data/
+# data/
 glue_data/
 configs/final/**
 configs/final/**/
@@ -14,3 +14,5 @@ configs/final/**/
 *.log
 utils/__pycache__/**
 token_preds/
+wandb/
+

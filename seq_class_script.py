@@ -115,6 +115,11 @@ if __name__ == "__main__":
     dev_dataset = TSVClassificationDataset(mode=Split.dev, **data_config)
     test_dataset = TSVClassificationDataset(mode=Split.test, **data_config)
 
+    print(test_dataset[0])
+    print(len(test_dataset))
+
+    print(labels)
+
     token_input_dir = config_dict.get("token_input_dir", None)
     if token_input_dir is not None:
         token_input_filename = config_dict.get("token_input_filename", None)
@@ -151,6 +156,7 @@ if __name__ == "__main__":
         # dev_dataset.set_token_scores_from_other_dataset(dev_dataset_token_labels)
         # test_dataset.set_token_scores_from_other_dataset(test_dataset_token_labels)
     logger.info(train_dataset[0].token_scores)
+
     training_args = TrainingArguments(
         output_dir=output_dir,
         overwrite_output_dir=True,
@@ -176,7 +182,7 @@ if __name__ == "__main__":
         logging_first_step=True,
         logging_dir=output_dir + "/log",
         save_steps=config_dict["logging_steps"],
-        evaluate_during_training=True,
+        # evaluate_during_training=True,
     )
 
     logger.warning(
@@ -212,13 +218,13 @@ if __name__ == "__main__":
         trainer.save_model()
         # For convenience, we also re-save the tokenizer to the same directory,
         # so that you can share your model easily on huggingface.co/models =)
-        if trainer.is_world_master():
-            tokenizer.save_pretrained(output_dir)
+        # if trainer.is_world_master():
+        #     tokenizer.save_pretrained(output_dir)
 
     # Evaluate Each Checkpoints
     dev_results = {}
     test_results = {}
-    checkpoints_list = trainer._sorted_checkpoints()
+    checkpoints_list = trainer._sorted_checkpoints(output_dir=trainer.args.output_dir)
 
     logger.info("Saved Checkpoints:")
     logger.info(str(checkpoints_list))

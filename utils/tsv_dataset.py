@@ -24,6 +24,7 @@ from transformers import (
     AutoModelForTokenClassification,
     BertForTokenClassification,
 )
+from transformers.data.data_collator import _collate_batch
 
 
 logger = logging.getLogger(__name__)
@@ -193,6 +194,9 @@ class MaskedDataCollator:
 
         # The rest of the time (10% of the time) we keep the masked input tokens unchanged
         return inputs
+
+    def __call__(self, features):
+        return self.collate_batch(features)
 
 
 class Split(Enum):
